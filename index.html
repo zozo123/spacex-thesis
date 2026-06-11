@@ -1,0 +1,534 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>The Multiplanetary Trade — A SpaceX Investment Thesis</title>
+<meta name="description" content="A personal investment thesis on the SpaceX (SPCX) listing — the bull case, the bear case, and the honest math in between. Not financial advice.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,300;0,9..144,400;0,9..144,600;0,9..144,800;0,9..144,900;1,9..144,300;1,9..144,400;1,9..144,600&family=Newsreader:ital,opsz,wght@0,6..72,300;0,6..72,400;0,6..72,500;1,6..72,300;1,6..72,400&family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+:root{
+  --ink:#0B0D10;
+  --ink-2:#10141A;
+  --paper:#EDE6D6;
+  --paper-dim:#A99F8A;
+  --paper-faint:#6E6757;
+  --burn:#FF5A1F;
+  --amber:#FFB000;
+  --bear:#E8392E;
+  --hairline:rgba(237,230,214,.13);
+  --hairline-strong:rgba(237,230,214,.25);
+}
+*{margin:0;padding:0;box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{
+  background:var(--ink);
+  color:var(--paper);
+  font-family:'Newsreader',Georgia,serif;
+  font-size:19px;
+  line-height:1.62;
+  font-weight:300;
+  -webkit-font-smoothing:antialiased;
+  overflow-x:hidden;
+}
+::selection{background:var(--burn);color:var(--ink)}
+
+/* ---- atmosphere ---- */
+.stars{
+  position:fixed;inset:0;z-index:0;pointer-events:none;
+  background-image:
+    radial-gradient(1px 1px at 12% 22%, rgba(237,230,214,.55) 50%, transparent 51%),
+    radial-gradient(1px 1px at 78% 12%, rgba(237,230,214,.4) 50%, transparent 51%),
+    radial-gradient(1.5px 1.5px at 55% 45%, rgba(237,230,214,.3) 50%, transparent 51%),
+    radial-gradient(1px 1px at 32% 72%, rgba(237,230,214,.45) 50%, transparent 51%),
+    radial-gradient(1px 1px at 88% 62%, rgba(237,230,214,.35) 50%, transparent 51%),
+    radial-gradient(1.5px 1.5px at 8% 88%, rgba(237,230,214,.25) 50%, transparent 51%),
+    radial-gradient(1px 1px at 67% 88%, rgba(237,230,214,.4) 50%, transparent 51%),
+    radial-gradient(1px 1px at 42% 8%, rgba(237,230,214,.3) 50%, transparent 51%);
+  background-size:900px 900px;
+  opacity:.5;
+}
+.grain{
+  position:fixed;inset:-50%;z-index:1;pointer-events:none;opacity:.05;
+  background-image:url("data:image/svg+xml,%3Csvg viewBox='0 0 400 400' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='2'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+  animation:grain 8s steps(10) infinite;
+}
+@keyframes grain{
+  0%,100%{transform:translate(0,0)}10%{transform:translate(-2%,-3%)}30%{transform:translate(3%,-2%)}
+  50%{transform:translate(-3%,2%)}70%{transform:translate(2%,3%)}90%{transform:translate(-2%,2%)}
+}
+main{position:relative;z-index:2}
+
+/* ---- type helpers ---- */
+.mono{font-family:'IBM Plex Mono',monospace;letter-spacing:.08em}
+.eyebrow{
+  font-family:'IBM Plex Mono',monospace;font-size:12px;font-weight:500;
+  letter-spacing:.22em;text-transform:uppercase;color:var(--burn);
+  display:flex;align-items:center;gap:14px;
+}
+.eyebrow::after{content:"";height:1px;flex:0 0 64px;background:var(--burn);opacity:.6}
+
+/* ---- ticker ---- */
+.ticker{
+  position:sticky;top:0;z-index:50;overflow:hidden;white-space:nowrap;
+  border-bottom:1px solid var(--hairline);background:rgba(11,13,16,.92);
+  backdrop-filter:blur(8px);padding:9px 0;
+}
+.ticker-track{display:inline-block;animation:tick 38s linear infinite}
+.ticker span{
+  font-family:'IBM Plex Mono',monospace;font-size:11.5px;letter-spacing:.18em;
+  text-transform:uppercase;color:var(--paper-dim);padding:0 1.6em;
+}
+.ticker b{color:var(--amber);font-weight:500}
+.ticker em{color:var(--burn);font-style:normal}
+@keyframes tick{from{transform:translateX(0)}to{transform:translateX(-50%)}}
+
+/* ---- hero ---- */
+.hero{
+  min-height:92vh;display:flex;flex-direction:column;justify-content:center;
+  padding:10vh 6vw 8vh;position:relative;
+}
+.hero .eyebrow{margin-bottom:4.5vh}
+h1{
+  font-family:'Fraunces',serif;font-optical-sizing:auto;
+  font-weight:300;font-size:clamp(54px,9.2vw,148px);
+  line-height:.98;letter-spacing:-.015em;max-width:12ch;
+}
+h1 .heavy{font-weight:800}
+h1 .lit{font-style:italic;font-weight:300;color:var(--burn)}
+.hero-sub{
+  margin-top:5vh;max-width:560px;font-size:clamp(19px,1.6vw,23px);
+  line-height:1.55;color:var(--paper-dim);font-weight:300;
+}
+.hero-sub strong{color:var(--paper);font-weight:500}
+.hero-meta{
+  margin-top:6vh;display:flex;flex-wrap:wrap;gap:12px;align-items:center;
+}
+.chip{
+  font-family:'IBM Plex Mono',monospace;font-size:11px;letter-spacing:.14em;
+  text-transform:uppercase;border:1px solid var(--hairline-strong);
+  border-radius:100px;padding:7px 16px;color:var(--paper-dim);
+}
+.chip.hot{border-color:var(--burn);color:var(--burn)}
+.hero-down{
+  position:absolute;bottom:5vh;right:6vw;font-family:'IBM Plex Mono',monospace;
+  font-size:11px;letter-spacing:.2em;color:var(--paper-faint);text-transform:uppercase;
+  writing-mode:vertical-rl;
+}
+
+/* ---- sections ---- */
+section{padding:13vh 6vw;border-top:1px solid var(--hairline);position:relative}
+.sec-head{display:grid;grid-template-columns:minmax(0,1fr);gap:18px;margin-bottom:7vh;max-width:1200px}
+.sec-num{
+  position:absolute;top:8vh;right:6vw;
+  font-family:'Fraunces',serif;font-weight:900;font-size:clamp(70px,9vw,150px);
+  line-height:1;color:transparent;-webkit-text-stroke:1px rgba(237,230,214,.14);
+  user-select:none;pointer-events:none;
+}
+h2{
+  font-family:'Fraunces',serif;font-weight:800;
+  font-size:clamp(38px,5vw,72px);line-height:1.03;letter-spacing:-.01em;max-width:16ch;
+}
+h2 em{font-style:italic;font-weight:300;color:var(--amber)}
+.cols{display:grid;grid-template-columns:1.15fr .85fr;gap:6vw;max-width:1200px}
+@media(max-width:900px){.cols{grid-template-columns:1fr}}
+.prose p{margin-bottom:1.5em;color:#D9D2C0}
+.prose p:last-child{margin-bottom:0}
+.prose .lede::first-letter{
+  font-family:'Fraunces',serif;font-weight:800;float:left;
+  font-size:4.1em;line-height:.82;padding:.06em .12em 0 0;color:var(--burn);
+}
+.kp{list-style:none;display:flex;flex-direction:column;gap:0}
+.kp li{
+  padding:20px 0 20px 34px;border-top:1px solid var(--hairline);
+  font-size:16.5px;line-height:1.55;color:var(--paper-dim);
+  position:relative;
+}
+.kp li:last-child{border-bottom:1px solid var(--hairline)}
+.kp li::before{
+  content:"→";font-family:'IBM Plex Mono',monospace;color:var(--burn);font-size:14px;
+  position:absolute;left:0;top:23px;
+}
+.kp b{color:var(--paper);font-weight:500}
+.kp-title{
+  font-family:'IBM Plex Mono',monospace;font-size:11px;letter-spacing:.22em;
+  text-transform:uppercase;color:var(--paper-faint);margin-bottom:16px;
+}
+
+/* ---- stats ---- */
+.stats{
+  display:grid;grid-template-columns:repeat(4,1fr);gap:1px;background:var(--hairline);
+  border:1px solid var(--hairline);margin-top:8vh;max-width:1200px;
+}
+@media(max-width:1000px){.stats{grid-template-columns:repeat(2,1fr)}}
+@media(max-width:520px){.stats{grid-template-columns:1fr}}
+.stat{background:var(--ink-2);padding:30px 26px 26px;transition:background .35s}
+.stat:hover{background:#141a22}
+.stat .v{
+  font-family:'Fraunces',serif;font-weight:600;font-size:clamp(34px,3.2vw,48px);
+  line-height:1;color:var(--amber);letter-spacing:-.01em;
+}
+.stat .l{margin-top:14px;font-size:14.5px;line-height:1.45;color:var(--paper-dim)}
+.stat .s{
+  margin-top:14px;font-family:'IBM Plex Mono',monospace;font-size:10px;
+  letter-spacing:.06em;line-height:1.5;color:var(--paper-faint);text-transform:uppercase;
+}
+
+/* ---- convergence badges ---- */
+.tag{
+  font-family:'IBM Plex Mono',monospace;font-size:9.5px;font-weight:600;
+  letter-spacing:.16em;padding:3px 9px;border-radius:3px;vertical-align:2px;margin-right:10px;
+}
+.tag.fact{background:rgba(255,176,0,.16);color:var(--amber);border:1px solid rgba(255,176,0,.35)}
+.tag.extrap{background:rgba(232,57,46,.12);color:#ff7d74;border:1px solid rgba(232,57,46,.35)}
+
+/* ---- the math strip ---- */
+.math-strip{
+  margin:8vh 0 0;max-width:1200px;border:1px solid var(--hairline-strong);
+  padding:6vh 5vw;text-align:center;background:linear-gradient(180deg,rgba(255,90,31,.05),transparent 60%);
+}
+.math-line{
+  font-family:'Fraunces',serif;font-weight:300;
+  font-size:clamp(30px,4.6vw,64px);line-height:1.15;letter-spacing:-.01em;
+}
+.math-line b{font-weight:800;color:var(--burn)}
+.math-sub{
+  margin-top:3vh;font-family:'IBM Plex Mono',monospace;font-size:12.5px;
+  letter-spacing:.14em;text-transform:uppercase;color:var(--paper-dim);line-height:2.1;
+}
+
+/* ---- bear section ---- */
+.bear{background:linear-gradient(180deg,rgba(232,57,46,.045),transparent 35%)}
+.bear .eyebrow,.bear .eyebrow::after{color:var(--bear);background:none}
+.bear .eyebrow::after{background:var(--bear)}
+.bear h2 em{color:var(--bear)}
+.bear .stat .v{color:var(--bear)}
+.bear .kp li::before{color:var(--bear)}
+.bear .prose .lede::first-letter{color:var(--bear)}
+
+/* ---- verdict ---- */
+.verdict{background:var(--paper);color:var(--ink)}
+.verdict .eyebrow{color:var(--ink)}
+.verdict .eyebrow::after{background:var(--ink)}
+.verdict h2{color:var(--ink)}
+.verdict h2 em{color:var(--burn)}
+.vgrid{display:grid;grid-template-columns:1fr 1fr;gap:6vw;max-width:1200px;margin-top:2vh}
+@media(max-width:900px){.vgrid{grid-template-columns:1fr}}
+.vcol h3{
+  font-family:'IBM Plex Mono',monospace;font-size:12px;font-weight:600;
+  letter-spacing:.22em;text-transform:uppercase;margin-bottom:24px;
+  padding-bottom:14px;border-bottom:2px solid var(--ink);
+}
+.vcol.weak h3{border-color:var(--bear);color:var(--bear)}
+.vcol ol{list-style:none;counter-reset:v}
+.vcol li{
+  counter-increment:v;padding:18px 0 18px 50px;border-bottom:1px solid rgba(11,13,16,.15);
+  font-size:16.5px;line-height:1.55;color:#3a352b;
+  position:relative;
+}
+.vcol li::before{
+  content:"0" counter(v);font-family:'Fraunces',serif;font-weight:800;
+  font-size:22px;color:var(--ink);position:absolute;left:0;top:20px;
+}
+.vcol.weak li::before{color:var(--bear)}
+.pull{
+  margin:10vh auto 0;max-width:1100px;text-align:center;
+}
+.pull blockquote{
+  font-family:'Fraunces',serif;font-style:italic;font-weight:300;
+  font-size:clamp(26px,3.6vw,46px);line-height:1.28;letter-spacing:-.01em;color:var(--ink);
+}
+.pull blockquote b{font-weight:600;font-style:normal;color:var(--burn)}
+.pull figcaption{
+  margin-top:3.5vh;font-family:'IBM Plex Mono',monospace;font-size:11px;
+  letter-spacing:.22em;text-transform:uppercase;color:#6E6757;
+}
+
+/* ---- footer ---- */
+footer{padding:10vh 6vw 8vh;border-top:1px solid var(--hairline)}
+.disclaimer{
+  max-width:760px;font-size:14.5px;line-height:1.7;color:var(--paper-faint);
+}
+.disclaimer b{color:var(--paper-dim);font-weight:500}
+.foot-meta{
+  margin-top:6vh;display:flex;flex-wrap:wrap;gap:24px;justify-content:space-between;
+  font-family:'IBM Plex Mono',monospace;font-size:10.5px;letter-spacing:.16em;
+  text-transform:uppercase;color:var(--paper-faint);
+}
+
+/* ---- reveals ---- */
+.rv{opacity:0;transform:translateY(26px);transition:opacity .8s cubic-bezier(.2,.6,.2,1),transform .8s cubic-bezier(.2,.6,.2,1)}
+.rv.in{opacity:1;transform:none}
+.rv.d1{transition-delay:.08s}.rv.d2{transition-delay:.16s}.rv.d3{transition-delay:.24s}
+@media(prefers-reduced-motion:reduce){.rv{opacity:1;transform:none;transition:none}.grain{animation:none}.ticker-track{animation:none}}
+</style>
+</head>
+<body>
+<div class="stars"></div>
+<div class="grain"></div>
+
+<div class="ticker" aria-hidden="true">
+  <div class="ticker-track">
+    <span><em>SPCX</em> · NASDAQ</span><span>LISTS <b>FRI JUN 12, 2026</b></span><span>FIXED PRICE <b>$135.00</b></span><span>VALUATION <b>≈$1.75T</b></span><span>RAISE <b>≈$75B</b> — LARGEST IPO IN HISTORY</span><span>2025 REVENUE <b>$18.5B+</b></span><span>STARLINK SUBS <b>10.3M+</b></span><span>NOT FINANCIAL ADVICE</span>
+    <span><em>SPCX</em> · NASDAQ</span><span>LISTS <b>FRI JUN 12, 2026</b></span><span>FIXED PRICE <b>$135.00</b></span><span>VALUATION <b>≈$1.75T</b></span><span>RAISE <b>≈$75B</b> — LARGEST IPO IN HISTORY</span><span>2025 REVENUE <b>$18.5B+</b></span><span>STARLINK SUBS <b>10.3M+</b></span><span>NOT FINANCIAL ADVICE</span>
+  </div>
+</div>
+
+<main>
+
+<!-- ============ HERO ============ -->
+<header class="hero">
+  <p class="eyebrow rv">A personal investment thesis · June 11, 2026</p>
+  <h1 class="rv d1">The <span class="heavy">Multiplanetary</span> <span class="lit">Trade</span></h1>
+  <p class="hero-sub rv d2">Tomorrow morning, SpaceX lists on the Nasdaq as <strong>SPCX</strong> — the largest IPO in financial history. This is the case for putting <strong>$1,000,000</strong> behind it, the math against it, and the honest verdict in between.</p>
+  <div class="hero-meta rv d3">
+    <span class="chip hot">NFA — not financial advice</span>
+    <span class="chip">One author, one position</span>
+    <span class="chip">Pressure-tested by an adversarial review</span>
+  </div>
+  <span class="hero-down">Scroll · T-minus one day</span>
+</header>
+
+<!-- ============ 01 LISTING ============ -->
+<section id="listing">
+  <span class="sec-num">01</span>
+  <div class="sec-head">
+    <p class="eyebrow rv">01 / The listing</p>
+    <h2 class="rv d1">This is not a rumor. <em>It is a filed, priced, scheduled IPO.</em></h2>
+  </div>
+  <div class="cols">
+    <div class="prose rv">
+      <p class="lede">SpaceX filed its S-1 on May 20, 2026, ran an accelerated roadshow from June 4, and prices after Thursday's close. Trading begins Friday, June 12, 2026 on the Nasdaq under the ticker SPCX. The company set a fixed price of $135 per share — skipping the usual price-range dance — selling roughly 556 million shares to raise about $75 billion at a valuation of roughly $1.75 trillion. That makes it the largest IPO ever, roughly three times Saudi Aramco's 2019 record.</p>
+      <p>The trajectory into this print has been vertical: $350 billion in late 2024, $800 billion at the December 2025 tender, $1.25 trillion after the xAI merger in February 2026, and now ~$1.75 trillion at listing. The last leg more than doubled in six months — though the $250 billion xAI absorption sits inside that window, so the comparison base itself changed. The S-1 also revealed the cost of that absorption: 2025 revenue topped $18.5 billion, against a net loss of nearly $5 billion.</p>
+      <p>Two structural facts matter for anyone writing a $1M check. First, this is a controlled company in the fullest sense: dual-class shares give Elon Musk roughly 85% of post-IPO voting power on about 42% of the equity, and SpaceX will rely on Nasdaq's controlled-company exemptions. You are buying economics, not influence. Second, the deal is built for retail in an unprecedented way — roughly 30% of the offering (about $22.5 billion) is earmarked for retail brokerages, triple the mega-cap norm. Insider lockups open between September and December 2026. The listing is real. The open question is what Friday's open does to a fixed $135 price.</p>
+    </div>
+    <div class="rv d2">
+      <p class="kp-title">What the filing says</p>
+      <ul class="kp">
+        <li><b>Verified:</b> prices June 11, lists Friday June 12, 2026 on Nasdaq as SPCX.</li>
+        <li>Fixed <b>$135/share</b>, ~556M shares, ~$75B raise — surpassing Saudi Aramco's record.</li>
+        <li>Dual-class control: <b>~85% of votes</b> on ~42% of equity; public holders get economics, not governance.</li>
+        <li><b>~30% retail allocation</b> (~$22.5B) via Schwab, Fidelity, Robinhood, SoFi, E-Trade.</li>
+        <li>Caution: valuation more than doubled from the Dec 2025 tender in six months; lockups expire Sep–Dec 2026.</li>
+      </ul>
+    </div>
+  </div>
+  <div class="stats rv">
+    <div class="stat"><div class="v">$1.75T</div><div class="l">IPO valuation at $135 per share</div><div class="s">S-1 / press coverage, June 2026</div></div>
+    <div class="stat"><div class="v">$75B</div><div class="l">Raise — the largest IPO in history</div><div class="s">~556M shares at fixed $135</div></div>
+    <div class="stat"><div class="v">$800B</div><div class="l">Last private mark, Dec 2025 tender</div><div class="s">Pre-xAI-merger; $421/sh pre-split</div></div>
+    <div class="stat"><div class="v">~85%</div><div class="l">Musk voting power on ~42% of equity</div><div class="s">S-1 dual-class disclosure</div></div>
+  </div>
+</section>
+
+<!-- ============ 02 LAUNCH ============ -->
+<section id="launch">
+  <span class="sec-num">02</span>
+  <div class="sec-head">
+    <p class="eyebrow rv">02 / The moat</p>
+    <h2 class="rv d1">The launch monopoly <em>nobody can touch.</em></h2>
+  </div>
+  <div class="cols">
+    <div class="prose rv">
+      <p class="lede">Start with the number that breaks every comparison: 165 Falcon launches in 2025 — a record for the sixth consecutive year, more orbital flights than the rest of the planet combined, one rocket roughly every 53 hours. Through June 8, 2026, SpaceX has already flown 68 Falcon missions. The engine of this machine is reuse: a single Falcon 9 booster just flew its 35th mission. Each reflight amortizes a ~$30M first stage across another revenue event — estimates put SpaceX's internal cost near $600–650/kg while it charges ~$2,700/kg. Competitors fight to break even at SpaceX's price; SpaceX books margin at its cost.</p>
+      <p>The cleaner measure of dominance is upmass. In 2025, SpaceX lofted roughly 2,213 of about 3,020 metric tons sent to orbit worldwide — roughly 73% of everything humanity put in space. All of China, the world's number-two launch power, managed about a tenth of SpaceX's mass. This isn't market share; it's market ownership, and it compounds while every rival flies expendable or barely-reusable hardware.</p>
+      <p>Starship is the second act — bruised but advancing. Twelve integrated flights. Super Heavy has been caught by the tower and reflown with a majority of its Raptors reused. Flight 12 in May 2026 debuted the Version 3 vehicle, deploying 22 payloads, though the booster was lost on return and a ship catch is still ahead. V3 targets 100+ tons to orbit, reusable. If full reuse lands, engineering estimates point below $200/kg and ultimately under $100/kg — a 10–30x collapse in the cost of reaching space. Those are design goals, not yet economics. But the moat is a decade of flight-proven iteration no competitor has begun accumulating: Blue Origin reportedly lost a year-plus to its May 2026 pad explosion, while Vulcan, Ariane 6, and Long March still fly expendable.</p>
+    </div>
+    <div class="rv d2">
+      <p class="kp-title">Why it compounds</p>
+      <ul class="kp">
+        <li><b>165 launches in 2025</b> — more than the rest of the world combined; 68 more by June 8, 2026.</li>
+        <li>Reuse is the margin machine: a booster on its <b>35th flight</b>; rivals compete with SpaceX's price, SpaceX operates at its cost.</li>
+        <li><b>~73% of global mass-to-orbit</b> in 2025; China's entire national program lifted roughly a tenth as much.</li>
+        <li>Starship at 12 flights: booster caught and reflown, V3 flying — full reuse points toward <b>sub-$100/kg</b> (target, not yet demonstrated).</li>
+        <li>Competitors structurally behind: the only rival booster-landing program reportedly sidelined a year by a pad explosion.</li>
+      </ul>
+    </div>
+  </div>
+  <div class="stats rv">
+    <div class="stat"><div class="v">165</div><div class="l">Falcon launches in 2025 — sixth straight record</div><div class="s">Year-end 2025 launch tallies</div></div>
+    <div class="stat"><div class="v">~73%</div><div class="l">Of global mass-to-orbit in 2025 (~2,213 of ~3,020 t)</div><div class="s">Independent upmass analyses</div></div>
+    <div class="stat"><div class="v">35</div><div class="l">Flights by a single Falcon 9 booster — record, June 2026</div><div class="s">Launch coverage, June 2026</div></div>
+    <div class="stat"><div class="v">&lt;$100<span style="font-size:.5em">/kg</span></div><div class="l">Starship marginal-cost target at full reuse, vs ~$2,700/kg today</div><div class="s">Design target — aspirational, not demonstrated</div></div>
+  </div>
+</section>
+
+<!-- ============ 03 STARLINK ============ -->
+<section id="starlink">
+  <span class="sec-num">03</span>
+  <div class="sec-head">
+    <p class="eyebrow rv">03 / The cash engine</p>
+    <h2 class="rv d1">Starlink: the <em>cash machine</em> in orbit.</h2>
+  </div>
+  <div class="cols">
+    <div class="prose rv">
+      <p class="lede">Strip away the rockets and the Mars iconography, and the S-1 reveals something Wall Street understands intuitively: a subscription telecom compounding at venture speed. Starlink did $11.4 billion of revenue in 2025, up roughly 50% year over year, and ended Q1 2026 at 10.3 million subscribers across 164 markets. More importantly, it is the only part of SpaceX that makes money: $7.2 billion of segment EBITDA at a 63% margin. That single line converts SpaceX from a launch company priced on dreams into a recurring-revenue business priced on cash flow.</p>
+      <p>The flywheel runs on three tracks. Consumer broadband keeps scaling as terminals get cheaper — though clock the trade-off: ARPU has fallen from $99/month in 2023 to $66 in Q1 2026 as growth shifts to price-sensitive markets. Volume is winning; pricing power is not. Second, direct-to-cell: 650+ satellites aloft, service live in ~22 countries, T-Mobile's T-Satellite commercial since July 2025, carriers signed across Japan, Australia, Canada, NZ, Switzerland, Chile, Ukraine. Third, government: $4.2 billion of enterprise/government revenue in 2025, and a $2.29 billion Space Force contract won in May 2026 — sticky, but politically entangled, at ~20% of total revenue.</p>
+      <p>Here is the honest version of the Mars-funding story: Starlink's $7 billion of EBITDA covers Starship's ~$3 billion annual R&amp;D comfortably — but not SpaceX's total ambition. Capex hit $20.7 billion in 2025, plugged with $26 billion of new debt and preferred; the IPO raise itself is the other plug. So the thesis is not "Starlink pays for Mars today." It is that Starlink is a proven, 60%-margin annuity growing ~50% a year — and every quarter it compounds, the speculative parts of the story get cheaper to own.</p>
+    </div>
+    <div class="rv d2">
+      <p class="kp-title">Three growth tracks</p>
+      <ul class="kp">
+        <li>SpaceX's only profitable segment: <b>$11.4B revenue, +50% YoY, 63% EBITDA margin</b> per the S-1.</li>
+        <li><b>10.3M subscribers</b> in 164 markets at Q1 2026 (vs 4.4M end-2024) — but ARPU slid from $99 to $66.</li>
+        <li>Direct-to-cell is real: <b>650+ satellites</b>, live in ~22 countries, T-Mobile commercial since mid-2025.</li>
+        <li>Starshield becoming a defense prime's revenue line: <b>$2.29B Space Force award</b>, ~20% of revenue from the U.S. government.</li>
+        <li>Two-sided math: EBITDA covers Starship R&amp;D, but <b>$20.7B capex</b> needed $26B of debt and preferred — hence the $75B raise.</li>
+      </ul>
+    </div>
+  </div>
+  <div class="stats rv">
+    <div class="stat"><div class="v">$11.4B</div><div class="l">Starlink revenue in 2025, up ~50% YoY</div><div class="s">SpaceX S-1, May 2026</div></div>
+    <div class="stat"><div class="v">10.3M+</div><div class="l">Subscribers across 164 markets, Q1 2026</div><div class="s">S-1; trackers estimate 12M by June</div></div>
+    <div class="stat"><div class="v">63%</div><div class="l">Segment EBITDA margin ($7.2B) — the only profitable unit</div><div class="s">SpaceX S-1</div></div>
+    <div class="stat"><div class="v">$2.29B</div><div class="l">Space Force data-network contract, May 2026</div><div class="s">~20% of revenue is U.S. government</div></div>
+  </div>
+</section>
+
+<!-- ============ 04 CONVERGENCE ============ -->
+<section id="convergence">
+  <span class="sec-num">04</span>
+  <div class="sec-head">
+    <p class="eyebrow rv">04 / The ecosystem</p>
+    <h2 class="rv d1">The convergence <em>already happened.</em></h2>
+  </div>
+  <div class="cols">
+    <div class="prose rv">
+      <p class="lede">When this thesis was first sketched, "X, xAI, and SpaceX as one ecosystem before 2030" was a prediction. It is now a filing. The dominoes fell in sequence: xAI absorbed X in March 2025. SpaceX put $2 billion into xAI's raise that July — corporate money, not Musk's. xAI closed a $20 billion Series E at ~$230 billion in December. Then on February 2, 2026, SpaceX acquired xAI outright in an all-stock deal valuing the combination at $1.25 trillion — with the caveat that an all-stock combination of two Musk-controlled entities had no arm's-length price discovery. Grok and X are now, in Musk's words, the AI division of SpaceX. The combined company is what lists tomorrow.</p>
+      <p>The strategic logic on the record is orbital compute. In January 2026, SpaceX filed an FCC application for up to one million solar-powered satellites functioning as an orbital AI data center. The roadmap is concrete: Starlink V3 satellites with Grok edge inference late 2026, prototype 150 kW compute satellites in early 2027, a million-square-foot satellite factory scaling through 2027. The bull case writes itself: the only entity that owns the rocket, the network, the model, the distribution, and increasingly the energy supply chain. AI's binding constraint is terrestrial power — and this is the only company with a credible path to routing around the grid entirely.</p>
+      <p>Tesla is the asterisk, and an instructive one. In November 2025, Tesla shareholders failed to authorize a proposed xAI investment — then Tesla invested $2 billion anyway, structured around the failed measure. That tells you two things at once: the convergence is real (Grok ships in Teslas; Tesla holds equity in what became SpaceX), and the governance is exactly as Musk-dependent as skeptics claim. Be honest about the line between fact and extrapolation — the mergers and filings are real; the orbital data-center economics rest on hardware that has never flown.</p>
+    </div>
+    <div class="rv d2">
+      <p class="kp-title">Fact vs. extrapolation</p>
+      <ul class="kp">
+        <li><span class="tag fact">Fact</span>The merger chain completed: xAI bought X (Mar 2025), SpaceX invested $2B (Jul 2025), then acquired xAI outright (Feb 2026) at a combined $1.25T.</li>
+        <li><span class="tag fact">Fact</span>FCC application filed Jan 2026 for up to <b>1,000,000</b> orbital AI-compute satellites; V3 Grok edge inference targeted late 2026.</li>
+        <li><span class="tag fact">Fact</span>Tesla shareholders failed to authorize an xAI investment — Tesla invested $2B anyway. Convergence is real; so is the governance risk it implies.</li>
+        <li><span class="tag extrap">Extrapolation</span>Orbital data centers being economical — no compute satellite has flown; thermal, radiation, and bandwidth economics unproven.</li>
+        <li><span class="tag extrap">Extrapolation</span>Reported ~$26B/yr of compute commitments from rival AI labs — single-sourced and unverified until filings confirm.</li>
+      </ul>
+    </div>
+  </div>
+  <div class="stats rv">
+    <div class="stat"><div class="v">$1.25T</div><div class="l">SpaceX–xAI all-stock merger, Feb 2026 — largest ever</div><div class="s">No arm's-length price discovery; both sides Musk-controlled</div></div>
+    <div class="stat"><div class="v">1M</div><div class="l">Satellites in the FCC orbital data-center application</div><div class="s">Application, not approval — Jan 2026</div></div>
+    <div class="stat"><div class="v">$250B</div><div class="l">xAI value inside the merger, after a $20B Series E</div><div class="s">Dec 2025 round at ~$230B with Nvidia, Cisco</div></div>
+    <div class="stat"><div class="v">2027</div><div class="l">First prototype 150 kW AI-compute satellites targeted</div><div class="s">Published roadmap; unflown hardware</div></div>
+  </div>
+</section>
+
+<!-- ============ 05 MATH ============ -->
+<section id="math">
+  <span class="sec-num">05</span>
+  <div class="sec-head">
+    <p class="eyebrow rv">05 / The arithmetic</p>
+    <h2 class="rv d1">The 100x math, <em>done honestly.</em></h2>
+  </div>
+  <div class="cols">
+    <div class="prose rv">
+      <p class="lede">Start with where the base actually is, because it moved fast: $350 billion in December 2024, ~$800 billion a year later, $1.25 trillion after the xAI merger, ~$1.75 trillion at tomorrow's listing. Here is the uncomfortable arithmetic: 100x from $1.75 trillion is $175 trillion. That is roughly one and a half times the entire world's annual GDP — about 34 times Nvidia, today's most valuable company. At a generous 30x earnings, a $175 trillion SpaceX would need to earn around $6 trillion a year: more than every US corporation combined earns today. Getting there in 20 years requires compounding at ~26% annually, every year, for two decades, from the largest IPO base in history.</p>
+      <p>Now the precedents, honestly stated. Companies have done 100x in 20 years — but look at where they started. Apple in 2006 was a ~$50 billion company. Amazon started that stretch around $16 billion. Nvidia was single-digit billions. Every great 100x began from tens of billions, not trillions. No company in history has even 10x'd from a trillion-dollar base. And the 100x-from-cheap trade already partially happened — to other people: anyone who bought the December 2024 tender is up roughly 5x in eighteen months. The retail buyer at $135 on Friday is buying after that repricing, not before it.</p>
+      <p>So what does spectacular-but-plausible look like? A 5–10x over 20 years — SpaceX at $9–18 trillion by the mid-2040s, two to three times today's largest company. Even that demands Starship economics working, Starlink compounding despite falling ARPU, and xAI winning real AI share. It would be magnificent. It would also annualize to roughly 8–12% a year: index-fund-adjacent returns wearing a rocket suit. The thesis can be directionally right — cheap mass to orbit really may be the platform of the century — and the 100x can still be close to mathematically impossible from this base. Conviction about the company and sobriety about the entry price are not in conflict. They are the whole discipline.</p>
+    </div>
+    <div class="rv d2">
+      <p class="kp-title">Reality checks</p>
+      <ul class="kp">
+        <li>The base ran away pre-IPO: <b>$350B → $800B → $1.25T → ~$1.75T</b> in eighteen months. Early holders already caught a 5x.</li>
+        <li>100x = <b>$175 trillion</b>: ~1.5x world GDP, requiring ~$6T of annual earnings at a normal multiple.</li>
+        <li>Every historical 100x started from tens of billions. <b>No company has ever 10x'd from $1T.</b></li>
+        <li>The price embeds heroic success: <b>~95x trailing revenue</b> on $18.5B of 2025 sales, with a ~$5B net loss and $29.1B of long-term debt.</li>
+        <li>Plausible-spectacular = 5–10x by the mid-2040s ≈ <b>8–12% annualized</b>. Great. Not life-changing-100x great.</li>
+      </ul>
+    </div>
+  </div>
+  <div class="math-strip rv">
+    <p class="math-line">$1.75T × 100 = <b>$175T</b> ≈ 1.5× world GDP</p>
+    <p class="math-sub">100x in 20 years requires ~26% compounded annually · for two decades · from the largest IPO base ever<br>The plausible-spectacular case: 5–10x ≈ 8–12% / year</p>
+  </div>
+</section>
+
+<!-- ============ 06 BEAR ============ -->
+<section id="bear" class="bear">
+  <span class="sec-num">06</span>
+  <div class="sec-head">
+    <p class="eyebrow rv">06 / The other side</p>
+    <h2 class="rv d1">The bear case: <em>priced for a miracle.</em></h2>
+  </div>
+  <div class="cols">
+    <div class="prose rv">
+      <p class="lede">Start with the number nobody on the roadshow wants to dwell on: ~$1.75 trillion — more than double the $800 billion its own insiders accepted six months ago, even granting that the $250 billion xAI merger sits inside that window. What else happened in the window is an S-1 disclosing a $4.27 billion net loss in Q1 2026 alone, a $41.3 billion accumulated deficit, capex that nearly doubled to $20.7 billion, and an AI division burning $2.5 billion a quarter. Morningstar pegs fair value at roughly $780 billion — 55% below the offer. At this price you are not buying SpaceX as it exists; you are prepaying for Starship working flawlessly, Starlink tripling, and an AI pivot that is currently a furnace for cash.</p>
+      <p>Then there is the man. Musk holds ~85% of voting power through super-voting shares, so public shareholders get economic exposure with zero governance recourse — to a CEO whose attention is split across six companies, and whose political entanglements are a documented business risk: the 2025 White House contract-review episode showed a single presidential mood swing can threaten roughly $22 billion in federal commitments. SpaceX is simultaneously a defense contractor dependent on Washington and the personal project of America's most polarizing political actor. That is not a footnote; it is the operating condition of the company.</p>
+      <p>The moat, meanwhile, is being besieged on schedule. Starlink ARPU has slid from ~$99 to ~$66 as growth pushes into poorer geographies. Amazon's Leo constellation has 331 production satellites up and commercial service targeted for mid-2026. China's state constellations have lofted 350+ satellites with plans for thousands per year — foreclosing Starlink from much of the Belt-and-Road world regardless of product quality. Starship, the load-bearing assumption, is 7-for-12. Mars has no articulated ROI at all. And for the retail buyer specifically: an unprecedented ~30% retail tranche means you are exactly the exit liquidity the structure is designed to find. The bear case doesn't require SpaceX to fail. It only requires SpaceX to be merely excellent — instead of perfect — at a price that already assumes perfection.</p>
+    </div>
+    <div class="rv d2">
+      <p class="kp-title">What the skeptic sees</p>
+      <ul class="kp">
+        <li>Valuation more than doubled in six months to a level <b>Morningstar values 55% lower</b>, while Q1 2026 lost $4.27B.</li>
+        <li>Absolute key-man risk: <b>~85% voting control</b>, attention split across six companies, politics as a standing threat to ~$22B in federal commitments.</li>
+        <li>The moat erodes at the edges: <b>ARPU down a third</b>, Amazon Leo entering service, Chinese constellations locking out aligned markets.</li>
+        <li>Starship is <b>7-for-12</b> and carries the whole growth story; the AI division burns $2.5B a quarter; Mars has no defined ROI.</li>
+        <li>A <b>$1M single-stock position</b> in a voting-rights-free, money-losing company at peak euphoria violates every rule of position sizing.</li>
+      </ul>
+    </div>
+  </div>
+  <div class="stats rv">
+    <div class="stat"><div class="v">−55%</div><div class="l">Morningstar fair value (~$780B) vs the IPO ask</div><div class="s">Analyst coverage, June 2026</div></div>
+    <div class="stat"><div class="v">$4.27B</div><div class="l">Net loss in Q1 2026 alone; $41.3B accumulated deficit</div><div class="s">SpaceX S-1, May 2026</div></div>
+    <div class="stat"><div class="v">7/12</div><div class="l">Starship full-mission success rate to date</div><div class="s">Flight record through May 2026</div></div>
+    <div class="stat"><div class="v">$66</div><div class="l">Starlink monthly ARPU, down from ~$99 in 2023</div><div class="s">S-1 cohort analysis</div></div>
+  </div>
+</section>
+
+<!-- ============ 07 VERDICT ============ -->
+<section id="verdict" class="verdict">
+  <div class="sec-head">
+    <p class="eyebrow rv">07 / The committee</p>
+    <h2 class="rv d1">Generational opportunity, <em>or priced to perfection?</em></h2>
+  </div>
+  <div class="vgrid">
+    <div class="vcol rv">
+      <h3>Strongest points</h3>
+      <ol>
+        <li>The launch moat is genuine, compounding market ownership — a decade of reuse iteration that capital alone cannot replicate, with every competitor still flying expendable.</li>
+        <li>Starlink converts the story-stock into a cash-flow asset: $11.4B of revenue at 63% segment margins, three distinct growth tracks, and the honesty to admit it funds Starship R&amp;D but not the whole ambition.</li>
+        <li>The thesis does its own math against itself: it names what 100x implies, concedes no company has 10x'd from a trillion, and separates fact from extrapolation throughout.</li>
+      </ol>
+    </div>
+    <div class="vcol weak rv d1">
+      <h3>Weakest points</h3>
+      <ol>
+        <li>Orbital AI data centers are speculation stacked on speculation: an FCC application (not approval), unflown hardware, unsolved thermal and bandwidth economics — doing heavy lifting in the valuation step-up.</li>
+        <li>Sub-$100/kg Starship costs are design goals presented alongside a 7-for-12 flight record. A target is not an economic datum.</li>
+        <li>"Untouchable" launch dominance is extrapolated into a permanent Starlink moat — while ARPU declines, Amazon Leo enters service, and ~20% of revenue depends on a politically volatile government relationship.</li>
+      </ol>
+    </div>
+  </div>
+  <figure class="pull rv">
+    <blockquote>"A generational company at a price where the generation already got paid: at this valuation you are not buying the miracle, you are <b>reimbursing the people who did</b> — perfection is the entry fee, and merely excellent loses money."</blockquote>
+    <figcaption>— the adversarial review, June 11, 2026</figcaption>
+  </figure>
+</section>
+
+</main>
+
+<footer>
+  <div class="disclaimer rv">
+    <p><b>Not financial advice.</b> This page is one person's investment thesis, published for discussion. It contains estimates, third-party reporting, and forward-looking speculation that may be wrong. Figures are drawn from the SpaceX S-1 and June 2026 press coverage and were pressure-tested by an adversarial review, but errors may remain — verify every number independently before acting on anything here. The author may hold a position in the securities discussed. Past performance of other companies is not a promise about this one. Position sizing matters more than conviction.</p>
+  </div>
+  <div class="foot-meta">
+    <span>The Multiplanetary Trade · June 11, 2026</span>
+    <span>Researched by seven parallel agents · One adversarial critique</span>
+    <span>SPCX · Nasdaq · T-minus one day</span>
+  </div>
+</footer>
+
+<script>
+const io=new IntersectionObserver(es=>{
+  es.forEach(e=>{if(e.isIntersecting){e.target.classList.add('in');io.unobserve(e.target)}})
+},{threshold:.12,rootMargin:'0px 0px -6% 0px'});
+document.querySelectorAll('.rv').forEach(el=>io.observe(el));
+</script>
+</body>
+</html>
